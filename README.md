@@ -16,13 +16,13 @@ curl -sSL https://raw.githubusercontent.com/Hud0520/ams-script/main/script/insta
 curl -sSL https://raw.githubusercontent.com/Hud0520/ams-script/main/script/install_ams_centos.sh | sudo bash
 ```
 
-### 🍎 macOS (Intel/M1/M2)
+### 🐳 Docker / Docker Compose (Mọi hệ điều hành: macOS, Linux, Windows)
 ```bash
-curl -sSL https://raw.githubusercontent.com/Hud0520/ams-script/main/script/install_ams_macos.sh | bash
+docker compose -f script/docker-compose.yml up -d --build
 ```
 
 ### 🪟 Windows (WSL2)
-*Mở PowerShell với quyền Admin và chạy:*
+*Mở PowerShell với quyền Admin và chạy (tự động nhận diện Ubuntu/CentOS trong WSL):*
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Hud0520/ams-script/main/script/install_ams_windows.ps1'))
 ```

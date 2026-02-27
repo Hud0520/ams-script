@@ -11,11 +11,22 @@ if (!(Get-Command wsl -ErrorAction SilentlyContinue)) {
     exit
 }
 
-# 2. Kiểm tra nếu Ubuntu đã sẵn sàng
-Write-Host "⚙️ Đang tiến hành cài đặt Ant Media Server vào môi trường Linux (Ubuntu)..." -ForegroundColor Cyan
+# 2. Kiểm tra nếu Ubuntu hoặc CentOS đã sẵn sàng
+Write-Host "⚙️ Đang tiến hành kiểm tra môi trường Linux trong WSL..." -ForegroundColor Cyan
 
-# Gọi script Ubuntu trực tiếp từ GitHub chạy trong WSL
-wsl -u root bash -c "curl -sSL https://raw.githubusercontent.com/Hud0520/ams-script/main/script/install_ams_linux_ubuntu.sh | bash"
+# Kiểm tra OS bên trong WSL
+$osFamily = wsl bash -c "if [ -f /etc/debian_version ]; then echo 'debian'; elif [ -f /etc/redhat-release ]; then echo 'rhel'; else echo 'unknown'; fi"
+
+if ($osFamily -eq "debian") {
+    Write-Host "Detected Debian/Ubuntu family in WSL. Running Ubuntu script..." -ForegroundColor Green
+    wsl -u root bash -c "curl -sSL https://raw.githubusercontent.com/Hud0520/ams-script/main/script/install_ams_ubuntu.sh | bash"
+} elseif ($osFamily -eq "rhel") {
+    Write-Host "Detected RHEL/CentOS family in WSL. Running CentOS script..." -ForegroundColor Green
+    wsl -u root bash -c "curl -sSL https://raw.githubusercontent.com/Hud0520/ams-script/main/script/install_ams_centos.sh | bash"
+} else {
+    Write-Host "⚠️ Không nhận diện được họ Linux trong WSL hoặc WSL chưa sẵn sàng. Mặc định chạy script Ubuntu..." -ForegroundColor Yellow
+    wsl -u root bash -c "curl -sSL https://raw.githubusercontent.com/Hud0520/ams-script/main/script/install_ams_ubuntu.sh | bash"
+}
 
 Write-Host "`n=====================================================" -ForegroundColor Green
 Write-Host "✅ QUÁ TRÌNH CÀI ĐẶT QUA WSL HOÀN TẤT!" -ForegroundColor Green
